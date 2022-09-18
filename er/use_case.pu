@@ -1,0 +1,26 @@
+@startuml
+left to right direction
+skinparam actorStyle awesome
+
+actor 消費者 #Green
+actor 配達システム #Blue
+
+rectangle 注文ユースケース {
+    usecase ログイン
+    usecase ユーザー登録
+    usecase 商品をカートに入れる
+    usecase 商品注文
+    usecase キャンセル
+}
+
+rectangle 配達ユースケース {
+    usecase 配達
+}
+
+消費者 --> ユーザー登録
+消費者 --> ログイン
+消費者 --> 商品をカートに入れる
+消費者 --> 商品注文
+消費者 --> キャンセル
+配達システム --> 配達
+@enduml

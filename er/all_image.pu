@@ -1,0 +1,67 @@
+@startuml
+entity product {
+    * id (商品ID)
+    --
+    name (商品名)
+    price (商品の料金)
+}
+
+entity favorit_product {
+    * product_id [FK(product, id)](商品ID)
+}
+
+entity shopping_account {
+    * id (アカウントID)
+    --
+    mail_address (メールアドレス)
+    password (パスワード)
+}
+
+entity cart {
+    * account_id (アカウントID)
+    * product_id (商品ID)
+    --
+    product_count (商品個数)
+}
+
+entity order {
+    * id (注文ID)
+    --
+    shopping_account_id (アカウントID)
+    date (注文日時)
+}
+
+entity cancel_order {
+    * order_id (注文ID)
+    --
+    date (キャンセル日時)
+}
+
+entity delivered_order {
+    * order_id (注文ID)
+    ‐‐
+    date (配達日時)
+}
+
+entity order_product {
+    * order_id (注文ID)
+    * product_id (商品ID)
+    --
+    product_count (商品個数)
+}
+
+entity order_status {
+    * order_id (注文ID)
+    --
+    status (ステータス(配達中、配達済み、キャンセル))
+}
+
+shopping_account ||--|| cart
+product ||--|| favorit_product
+order ||--|| shopping_account
+order ||-r-|{ order_product
+order ||-l-|| order_status
+product ||--|{ order_product
+order <|-d- cancel_order
+order <|-- delivered_order
+@enduml
