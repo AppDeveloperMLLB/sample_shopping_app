@@ -5,9 +5,9 @@ part 'product.freezed.dart';
 abstract class Product implements _$Product {
   const Product._();
   const factory Product({
-    // add params
     required String id,
     required String name,
     required int price,
+    required String imageResource,
   }) = _Product;
 }

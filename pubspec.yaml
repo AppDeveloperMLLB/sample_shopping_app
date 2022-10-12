@@ -37,7 +37,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   # 状態管理に使用
-  flutter_riverpod: ^2.0.0-dev.9
+  flutter_riverpod: ^2.0.2
   # 不変オブジェクト生成に使用
   freezed_annotation: ^2.0.3
   # JSONのシリアライズ用に使用
@@ -80,8 +80,13 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
+  assets:
+    - asset/images/product1.png
+    - asset/images/product2.png
+    - asset/images/product3.png
+    - asset/images/product4.png
+    - asset/images/product5.png
+    - asset/images/product6.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

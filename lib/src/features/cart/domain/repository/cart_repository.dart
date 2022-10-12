@@ -1,8 +1,12 @@
+import 'package:sample_shopping_app/src/features/cart/domain/models/cart_item.dart';
 import 'package:sample_shopping_app/src/features/product_list/domain/model/product.dart';
 
 abstract class CartRepository {
-  Future<void> add(Product product);
-  Future<void> delete(Product product);
+  Stream<List<Product>> watchCart();
+  Future<void> add(CartItem item);
+  Future<void> update(CartItem item);
+  Future<CartItem> getCartItem(String productId);
+  Future<void> delete(String productId);
   Future<void> deleteAll();
-  Future<List<Product>> getProducts();
+  Future<List<CartItem>> getAllItemsInCart();
 }

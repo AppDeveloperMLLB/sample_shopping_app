@@ -16,10 +16,10 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$Product {
-// add params
   String get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   int get price => throw _privateConstructorUsedError;
+  String get imageResource => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $ProductCopyWith<Product> get copyWith => throw _privateConstructorUsedError;
@@ -29,7 +29,7 @@ mixin _$Product {
 abstract class $ProductCopyWith<$Res> {
   factory $ProductCopyWith(Product value, $Res Function(Product) then) =
       _$ProductCopyWithImpl<$Res>;
-  $Res call({String id, String name, int price});
+  $Res call({String id, String name, int price, String imageResource});
 }
 
 /// @nodoc
@@ -45,6 +45,7 @@ class _$ProductCopyWithImpl<$Res> implements $ProductCopyWith<$Res> {
     Object? id = freezed,
     Object? name = freezed,
     Object? price = freezed,
+    Object? imageResource = freezed,
   }) {
     return _then(_value.copyWith(
       id: id == freezed
@@ -59,6 +60,10 @@ class _$ProductCopyWithImpl<$Res> implements $ProductCopyWith<$Res> {
           ? _value.price
           : price // ignore: cast_nullable_to_non_nullable
               as int,
+      imageResource: imageResource == freezed
+          ? _value.imageResource
+          : imageResource // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -69,7 +74,7 @@ abstract class _$$_ProductCopyWith<$Res> implements $ProductCopyWith<$Res> {
           _$_Product value, $Res Function(_$_Product) then) =
       __$$_ProductCopyWithImpl<$Res>;
   @override
-  $Res call({String id, String name, int price});
+  $Res call({String id, String name, int price, String imageResource});
 }
 
 /// @nodoc
@@ -86,6 +91,7 @@ class __$$_ProductCopyWithImpl<$Res> extends _$ProductCopyWithImpl<$Res>
     Object? id = freezed,
     Object? name = freezed,
     Object? price = freezed,
+    Object? imageResource = freezed,
   }) {
     return _then(_$_Product(
       id: id == freezed
@@ -100,6 +106,10 @@ class __$$_ProductCopyWithImpl<$Res> extends _$ProductCopyWithImpl<$Res>
           ? _value.price
           : price // ignore: cast_nullable_to_non_nullable
               as int,
+      imageResource: imageResource == freezed
+          ? _value.imageResource
+          : imageResource // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -107,20 +117,25 @@ class __$$_ProductCopyWithImpl<$Res> extends _$ProductCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_Product extends _Product {
-  const _$_Product({required this.id, required this.name, required this.price})
+  const _$_Product(
+      {required this.id,
+      required this.name,
+      required this.price,
+      required this.imageResource})
       : super._();
 
-// add params
   @override
   final String id;
   @override
   final String name;
   @override
   final int price;
+  @override
+  final String imageResource;
 
   @override
   String toString() {
-    return 'Product(id: $id, name: $name, price: $price)';
+    return 'Product(id: $id, name: $name, price: $price, imageResource: $imageResource)';
   }
 
   @override
@@ -130,7 +145,9 @@ class _$_Product extends _Product {
             other is _$_Product &&
             const DeepCollectionEquality().equals(other.id, id) &&
             const DeepCollectionEquality().equals(other.name, name) &&
-            const DeepCollectionEquality().equals(other.price, price));
+            const DeepCollectionEquality().equals(other.price, price) &&
+            const DeepCollectionEquality()
+                .equals(other.imageResource, imageResource));
   }
 
   @override
@@ -138,7 +155,8 @@ class _$_Product extends _Product {
       runtimeType,
       const DeepCollectionEquality().hash(id),
       const DeepCollectionEquality().hash(name),
-      const DeepCollectionEquality().hash(price));
+      const DeepCollectionEquality().hash(price),
+      const DeepCollectionEquality().hash(imageResource));
 
   @JsonKey(ignore: true)
   @override
@@ -150,15 +168,18 @@ abstract class _Product extends Product {
   const factory _Product(
       {required final String id,
       required final String name,
-      required final int price}) = _$_Product;
+      required final int price,
+      required final String imageResource}) = _$_Product;
   const _Product._() : super._();
 
-  @override // add params
+  @override
   String get id;
   @override
   String get name;
   @override
   int get price;
+  @override
+  String get imageResource;
   @override
   @JsonKey(ignore: true)
   _$$_ProductCopyWith<_$_Product> get copyWith =>

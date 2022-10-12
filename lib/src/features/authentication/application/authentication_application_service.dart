@@ -3,7 +3,7 @@ import 'package:sample_shopping_app/src/features/authentication/domain/model/aut
 class AuthenticationApplicationService {
   Future<void> login(String email, String password) {
     final info = AuthenticationInfo(email: email, password: password);
-    throw Exception();
+    throw Exception("no implements");
   }
 
   Future<void> register(String email, String password) {
