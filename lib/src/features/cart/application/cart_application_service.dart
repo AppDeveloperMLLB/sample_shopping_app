@@ -11,8 +11,8 @@ class CartApplicationService {
   final CartRepository cartRepository =
       RepositoryLocator.instance.get<CartRepository>();
 
-  StreamProvider<List<Product>> watchCart() {
-    return StreamProvider<List<Product>>((ref) {
+  StreamProvider<List<ProductInCart>> watchCart() {
+    return StreamProvider<List<ProductInCart>>((ref) {
       return cartRepository.watchCart();
     });
   }
@@ -51,3 +51,21 @@ class CartApplicationService {
     await cartRepository.update(cartItem);
   }
 }
+
+final cartProvider = StreamProvider<List<ProductInCart>>((ref) {
+  final CartRepository cartRepository = RepositoryLocator.instance.get<CartRepository>();
+  return cartRepository.watchCart();
+});
+
+final cartTotalProvider = Provider<int>((ref) {
+  final productsInCart = ref.watch(cartProvider).value;
+  if(productsInCart == null || productsInCart.isEmpty) {
+    return 0;
+  }
+
+  int total = 0;
+  for(final productInCart in productsInCart){
+    total += productInCart.product.price;
+  }
+  return total;
+});

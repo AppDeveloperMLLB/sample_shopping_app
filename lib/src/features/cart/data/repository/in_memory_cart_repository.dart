@@ -1,3 +1,4 @@
+import 'package:sample_shopping_app/src/features/cart/application/product_in_cart.dart';
 import 'package:sample_shopping_app/src/features/cart/domain/models/cart_item.dart';
 import 'package:sample_shopping_app/src/features/cart/domain/repository/cart_repository.dart';
 import 'package:sample_shopping_app/src/features/product_list/domain/model/product.dart';
@@ -8,17 +9,17 @@ import 'package:sample_shopping_app/src/utils/in_memory_store.dart';
 class InCartRepository implements CartRepository {
   InCartRepository._();
   static final instance = InCartRepository._();
-  final _cart = InMemoryStore<List<Product>>([]);
+  final _cart = InMemoryStore<List<ProductInCart>>([]);
   final List<CartItem> _cartItems = [];
 
   @override
-  Stream<List<Product>> watchCart() {
+  Stream<List<ProductInCart>> watchCart() {
     return _cart.stream;
   }
 
   @override
   Future<void> add(CartItem item) async {
-    if (_cart.value.any((element) => element.id == item.productId)) {
+    if (_cart.value.any((element) => element.product.id == item.productId)) {
       throw Exception("Failed to add product in cart");
     }
 
@@ -26,7 +27,7 @@ class InCartRepository implements CartRepository {
     final productRepository =
         RepositoryLocator.instance.get<ProductRepository>();
     final product = await productRepository.fetch(item.productId);
-    _cart.value.add(product);
+    _cart.value.add(ProductInCart(product: product, num: item.num));
   }
 
   @override
@@ -37,7 +38,7 @@ class InCartRepository implements CartRepository {
       throw Exception("Failed to delete product in cart");
     }
     _cartItems.removeAt(index);
-    _cart.value.removeWhere((element) => element.id == productId);
+    _cart.value.removeWhere((element) => element.product.id == productId);
   }
 
   @override

@@ -1,5 +1,6 @@
 import 'package:path/path.dart';
 import 'package:sample_shopping_app/src/features/authentication/presentation/login/login_page.dart';
+import 'package:sample_shopping_app/src/home_page.dart';
 import 'package:sample_shopping_app/src/routing/not_found_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -38,7 +39,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/',
         name: AppRoute.home.name,
-        builder: (context, state) => const LoginPage(),
+        builder: (context, state) => const BottomNavigationPage(),
       ),
       // GoRoute(
       //   path: '/',

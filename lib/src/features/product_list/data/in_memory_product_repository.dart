@@ -41,13 +41,16 @@ class InMemoryProductRepository implements ProductRepository {
       imageResource: "asset/images/product6.png",
     ),
   ];
+
   @override
   Future<List<Product>> fetchAll() async {
+    await Future.delayed(const Duration(seconds: 3));
     return products;
   }
 
   @override
   Future<Product> fetch(String productId) async {
+    await Future.delayed(const Duration(seconds: 1));
     final index = products.indexWhere((element) => element.id == productId);
     return products[index];
   }
