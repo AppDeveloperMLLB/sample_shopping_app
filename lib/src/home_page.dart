@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sample_shopping_app/src/features/authentication/presentation/acount/account_page.dart';
 import 'package:sample_shopping_app/src/features/cart/presentation/shopping_cart_page.dart';
 import 'package:sample_shopping_app/src/features/product_list/data/in_memory_product_repository.dart';
 import 'package:sample_shopping_app/src/features/product_list/domain/model/product.dart';
@@ -16,7 +17,8 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
   // 表示するページ
   static final List<Widget> _screens = [
     const ProductListPage(),
-    ShoppingCartPage(),
+    const ShoppingCartPage(),
+    const AccountPage(),
   ];
 
   // どのページを表示するか指定するindex
@@ -41,6 +43,8 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
             BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
             BottomNavigationBarItem(
                 icon: Icon(Icons.shopping_cart), label: 'Cart'),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.account_circle), label: 'Account'),
             // BottomNavigationBarItem(
             //     icon: Icon(Icons.local_shipping), label: 'Delivery'),
             // BottomNavigationBarItem(icon: Icon(Icons.list), label: 'Sample'),

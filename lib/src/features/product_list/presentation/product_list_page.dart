@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sample_shopping_app/src/features/product_list/domain/model/product.dart';
 import 'package:sample_shopping_app/src/features/product_list/presentation/product_card.dart';
+import 'package:sample_shopping_app/src/routing/app_router.dart';
 
 import '../data/in_memory_product_repository.dart';
 
@@ -34,7 +36,7 @@ class _SampleListPageState extends ConsumerState<ProductListPage>
     final products = InMemoryProductRepository().products;
     return Scaffold(
       appBar: AppBar(
-        title: Center(
+        title: const Center(
           child: Text("Sample List"),
         ),
       ),
@@ -45,13 +47,13 @@ class _SampleListPageState extends ConsumerState<ProductListPage>
         itemBuilder: (BuildContext context, int index) {
           final int count = products.length > 10 ? 10 : products.length;
           final Animation<double> animation =
-          Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-              parent: animationController!,
-              curve: Interval((1 / count) * index, 1.0,
-                  curve: Curves.fastOutSlowIn)));
+              Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+                  parent: animationController!,
+                  curve: Interval((1 / count) * index, 1.0,
+                      curve: Curves.fastOutSlowIn)));
           animationController?.forward();
           return SampleListView(
-            callback: () => onProductTapped,
+            callback: (Product product) => onProductTapped(product),
             product: products[index],
             animation: animation,
             animationController: animationController!,
@@ -61,8 +63,8 @@ class _SampleListPageState extends ConsumerState<ProductListPage>
     );
   }
 
-  void onProductTapped(){
-
+  void onProductTapped(Product product) {
+    context.goNamed(AppRoute.product.name, extra: product);
   }
 }
 
@@ -75,7 +77,7 @@ class SampleListView extends StatelessWidget {
     required this.animation,
   }) : super(key: key);
 
-  final VoidCallback? callback;
+  final void Function(Product product) callback;
   final Product product;
   final AnimationController? animationController;
   final Animation<double>? animation;
@@ -88,9 +90,12 @@ class SampleListView extends StatelessWidget {
         return FadeTransition(
           opacity: animation!,
           child: Transform(
-              transform: Matrix4.translationValues(
-                  0.0, 50 * (1.0 - animation!.value), 0.0),
-              child: ProductCard(product: product, onTapped: callback!,),
+            transform: Matrix4.translationValues(
+                0.0, 50 * (1.0 - animation!.value), 0.0),
+            child: ProductCard(
+              product: product,
+              onTapped: callback!,
+            ),
           ),
         );
       },

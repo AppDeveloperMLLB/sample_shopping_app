@@ -1,6 +1,10 @@
 import 'package:path/path.dart';
+import 'package:sample_shopping_app/src/features/authentication/domain/repository/authentication_reporisory.dart';
 import 'package:sample_shopping_app/src/features/authentication/presentation/login/login_page.dart';
+import 'package:sample_shopping_app/src/features/product_list/domain/model/product.dart';
+import 'package:sample_shopping_app/src/features/product_list/presentation/product_page.dart';
 import 'package:sample_shopping_app/src/home_page.dart';
+import 'package:sample_shopping_app/src/locator/repository_locator.dart';
 import 'package:sample_shopping_app/src/routing/not_found_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,37 +14,66 @@ enum AppRoute {
   home,
   product,
   cart,
-  checkout,
-  orders,
   login,
   register,
 }
 
+class AppLocation {
+  final String location;
+  AppLocation({required this.location});
+}
+
+Map<AppRoute, AppLocation> appRoutes = {
+  AppRoute.home: AppLocation(location: "/"),
+  AppRoute.product: AppLocation(location: "/product"),
+  AppRoute.cart: AppLocation(location: "/cart"),
+  AppRoute.login: AppLocation(location: "/login"),
+};
+
 final goRouterProvider = Provider<GoRouter>((ref) {
-  //final authRepository = ref.watch(authRepositoryProvider);
+  final authRepository =
+      RepositoryLocator.instance.get<AuthenticationRepository>();
   return GoRouter(
-    initialLocation: '/',
-    //debugLogDiagnostics: false,
-    // redirect: (state) {
-    //   final isLoggedIn = authRepository.currentUser != null;
-    //   if (isLoggedIn) {
-    //     if (state.location == '/signIn') {
-    //       return '/';
-    //     }
-    //   } else {
-    //     if (state.location == '/account' || state.location == '/orders') {
-    //       return '/';
-    //     }
-    //   }
-    //   return null;
-    // },
-    // refreshListenable: GoRouterRefreshStream(authRepository.authStateChanges()),
+    initialLocation: appRoutes[AppRoute.home]?.location,
+    debugLogDiagnostics: false,
+    redirect: (state) {
+      final isLoggedIn = authRepository.currentUser != null;
+      if (isLoggedIn) {
+        if (state.location == appRoutes[AppRoute.login]?.location) {
+          return appRoutes[AppRoute.home]!.location;
+        }
+      } else {
+        if (state.location != appRoutes[AppRoute.login]!.location) {
+          return appRoutes[AppRoute.login]!.location;
+        }
+      }
+      return null;
+    },
+    refreshListenable: GoRouterRefreshStream(authRepository.authStateChanges()),
     routes: [
       GoRoute(
-        path: '/',
-        name: AppRoute.home.name,
-        builder: (context, state) => const BottomNavigationPage(),
+        path: appRoutes[AppRoute.login]!.location,
+        name: AppRoute.login.name,
+        builder: (context, state) => const LoginPage(),
       ),
+      GoRoute(
+          path: '/',
+          name: AppRoute.home.name,
+          builder: (context, state) => const BottomNavigationPage(),
+          routes: [
+            GoRoute(
+              path: 'product',
+              name: AppRoute.product.name,
+              pageBuilder: (context, state) {
+                final product = state.extra! as Product;
+                return MaterialPage(
+                  child: ProductPage(
+                    product: product,
+                  ),
+                );
+              },
+            ),
+          ]),
       // GoRoute(
       //   path: '/',
       //   name: AppRoute.home.name,

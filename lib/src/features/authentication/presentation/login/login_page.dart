@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sample_shopping_app/src/features/authentication/presentation/login/login_page_controller_provider.dart';
+import 'package:sample_shopping_app/src/features/authentication/presentation/login/login_page_state.dart';
 import 'package:sample_shopping_app/src/utils/async_value_ui.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
@@ -14,6 +15,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+
   @override
   void dispose() {
     emailController.dispose();
@@ -22,9 +24,14 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    ref.listen<AsyncValue<void>>(loginPageControllerProvider, (_, next) {
-      next.showAlertDialogOnError(context);
+    ref.listen<AsyncValue<LoginPageState>>(loginPageControllerProvider,
+        (_, next) {
+      next.value?.value.showAlertDialogOnError(context,
+          callback: () =>
+              ref.read(loginPageControllerProvider.notifier).clearError());
     });
+
+    final state = ref.watch(loginPageControllerProvider);
 
     return Scaffold(
       appBar: AppBar(title: const Text("Login")),
@@ -43,9 +50,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                       keyboardType: TextInputType.emailAddress,
                       decoration:
                           const InputDecoration(hintText: "Mail address"),
-                      // validator: (text) {
-                      //   return 'aaaa';
-                      // },
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 16),
@@ -62,14 +66,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               Padding(
                 padding: const EdgeInsets.only(top: 16),
                 child: ElevatedButton(
-                  child: const Text("login"),
+                  child: Text(state.value?.buttonText ?? ""),
                   onPressed: () {
-                    // if (_formKey.currentState!.validate()) {
-                    //   ref
-                    //       .read(loginPageControllerProvider.notifier)
-                    //       .login(emailController.text, passwordController.text);
-                    // }
-
                     ref
                         .read(loginPageControllerProvider.notifier)
                         .login(emailController.text, passwordController.text);
@@ -77,6 +75,14 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 ),
               ),
               const Spacer(),
+              TextButton(
+                onPressed: () {
+                  ref
+                      .read(loginPageControllerProvider.notifier)
+                      .switchLoginType();
+                },
+                child: Text(state.value?.switchButtonText ?? ""),
+              ),
             ],
           ),
         ),

@@ -4,4 +4,6 @@ abstract class AuthenticationRepository {
   Future<void> login(AuthenticationInfo info);
   Future<void> register(AuthenticationInfo info);
   Future<void> logout();
+  Stream<AuthenticationInfo?> authStateChanges();
+  AuthenticationInfo? get currentUser;
 }

@@ -1,19 +1,46 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sample_shopping_app/src/features/authentication/application/authentication_application_service.dart';
-import 'package:sample_shopping_app/src/features/authentication/domain/model/authentication_info.dart';
-import 'package:sample_shopping_app/src/features/authentication/domain/repository/authentication_reporisory.dart';
-import 'package:sample_shopping_app/src/locator/repository_locator.dart';
+import 'package:sample_shopping_app/src/features/authentication/presentation/login/login_page_state.dart';
 
-final loginPageControllerProvider =
-    StateNotifierProvider<LoginPageControllerNotifier, AsyncValue<void>>((ref) {
+final loginPageControllerProvider = StateNotifierProvider<
+    LoginPageControllerNotifier, AsyncValue<LoginPageState>>((ref) {
   return LoginPageControllerNotifier();
 });
 
-class LoginPageControllerNotifier extends StateNotifier<AsyncValue<void>> {
-  LoginPageControllerNotifier() : super(const AsyncValue.data(null));
+enum LoginType {
+  singIn,
+  register,
+}
+
+class LoginPageControllerNotifier
+    extends StateNotifier<AsyncValue<LoginPageState>> {
+  LoginPageControllerNotifier()
+      : super(
+          const AsyncValue.data(
+            LoginPageState(
+              loginType: LoginType.singIn,
+              value: AsyncData(null),
+            ),
+          ),
+        );
 
   Future<void> login(String email, String password) async {
+    state = const AsyncLoading<LoginPageState>().copyWithPrevious(state);
     final service = AuthenticationApplicationService();
-    state = await AsyncValue.guard(() => service.login(email, password));
+    final newState =
+        await AsyncValue.guard(() => service.login(email, password));
+    state = AsyncData(state.value!.copyWith(value: newState));
+  }
+
+  void switchLoginType() {
+    final currentLoginType = state.value?.loginType ?? LoginType.singIn;
+    final newLoginType = currentLoginType == LoginType.singIn
+        ? LoginType.register
+        : LoginType.singIn;
+    state = AsyncData(state.value!.copyWith(loginType: newLoginType));
+  }
+
+  void clearError() {
+    state = AsyncData(state.value!.copyWith(value: const AsyncData(null)));
   }
 }
