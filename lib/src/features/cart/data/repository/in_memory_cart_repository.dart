@@ -70,5 +70,21 @@ class InCartRepository implements CartRepository {
       throw Exception("Failed to update product in cart");
     }
     _cartItems[index] = item;
+
+    final productRepository =
+        RepositoryLocator.instance.get<ProductRepository>();
+    final product = await productRepository.fetch(item.productId);
+    final List<ProductInCart> newList = [];
+    _cart.value.asMap().forEach((i, element) {
+      if (index == i) {
+        newList.add(ProductInCart(product: product, num: item.num));
+        return;
+      }
+
+      newList.add(element);
+    });
+
+    //_cart.value.clear();
+    _cart.value = newList;
   }
 }

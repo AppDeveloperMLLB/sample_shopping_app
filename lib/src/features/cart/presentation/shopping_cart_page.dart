@@ -1,3 +1,4 @@
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sample_shopping_app/src/common_widgets/async_value_widget.dart';
@@ -11,10 +12,27 @@ class ShoppingCartPage extends ConsumerWidget {
   const ShoppingCartPage({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final productStreamProviderInCart = ref
-    //     .read(shoppingCartPageControllerProvider.notifier)
-    //     .getProductListStreamInCart();
-    // final cartValue = ref.watch(productStreamProviderInCart);
+    final appBar = AppBar(
+      title: const Text('カート'),
+    );
+
+    final isEmpty = ref.watch<bool>(
+        cartProvider.select((value) => (value.value?.length ?? 0) == 0));
+
+    if (isEmpty) {
+      return Scaffold(
+        appBar: appBar,
+        body: const SafeArea(
+          child: Center(
+            child: Text(
+              "商品がありません",
+              style: TextStyle(fontSize: 16),
+            ),
+          ),
+        ),
+      );
+    }
+
     final cartValue = ref.watch(cartProvider);
     return Scaffold(
         appBar: AppBar(
@@ -25,15 +43,9 @@ class ShoppingCartPage extends ConsumerWidget {
             child: AsyncValueWidget(
               value: cartValue,
               data: (productList) {
-                if(productList.isEmpty){
-                  return const Text("商品がありません", style: TextStyle(fontSize: 16),);
-                }
                 return Column(
                   children: [
-                    const Text(
-                      "合計：10000円",
-                      style: TextStyle(fontSize: 32),
-                    ),
+                    const CartTotalText(),
                     ElevatedButton(
                       onPressed: () {},
                       child: const Padding(
@@ -78,5 +90,18 @@ class ShoppingCartPage extends ConsumerWidget {
             ),
           ),
         ));
+  }
+}
+
+class CartTotalText extends ConsumerWidget {
+  const CartTotalText({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final cartTotal = ref.watch(cartTotalProvider);
+    return Text(
+      "合計：$cartTotal円",
+      style: const TextStyle(fontSize: 32),
+    );
   }
 }

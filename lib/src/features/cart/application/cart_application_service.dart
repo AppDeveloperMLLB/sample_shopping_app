@@ -41,31 +41,51 @@ class CartApplicationService {
 
   Future<void> increment(String productId) async {
     final cartItem = await cartRepository.getCartItem(productId);
-    cartItem.increment();
-    await cartRepository.update(cartItem);
+    final incrementedCartItem = cartItem.increment();
+    await cartRepository.update(incrementedCartItem);
   }
 
   Future<void> decrement(String productId) async {
     final cartItem = await cartRepository.getCartItem(productId);
-    cartItem.decrement();
-    await cartRepository.update(cartItem);
+    final decrementedCartItem = cartItem.decrement();
+    await cartRepository.update(decrementedCartItem);
   }
 }
 
 final cartProvider = StreamProvider<List<ProductInCart>>((ref) {
-  final CartRepository cartRepository = RepositoryLocator.instance.get<CartRepository>();
+  final CartRepository cartRepository =
+      RepositoryLocator.instance.get<CartRepository>();
   return cartRepository.watchCart();
+});
+
+final cartItemsTotalCountProvider = Provider<int>((ref) {
+  return ref.watch(cartProvider).maybeMap(
+        data: (cart) => cart.value.length,
+        orElse: () => 0,
+      );
 });
 
 final cartTotalProvider = Provider<int>((ref) {
   final productsInCart = ref.watch(cartProvider).value;
-  if(productsInCart == null || productsInCart.isEmpty) {
+  if (productsInCart == null || productsInCart.isEmpty) {
     return 0;
   }
 
   int total = 0;
-  for(final productInCart in productsInCart){
+  for (final productInCart in productsInCart) {
     total += productInCart.product.price;
   }
   return total;
+});
+
+final itemCountProvider =
+    Provider.autoDispose.family<int, String>((ref, productId) {
+  final cart = ref.watch(cartProvider).value;
+  if (cart != null) {
+    final product =
+        cart.firstWhere((element) => element.product.id == productId);
+    return product?.num ?? 1;
+  }
+
+  return 1;
 });

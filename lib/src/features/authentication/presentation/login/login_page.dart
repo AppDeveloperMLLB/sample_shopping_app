@@ -12,8 +12,11 @@ class LoginPage extends ConsumerStatefulWidget {
 }
 
 class _LoginPageState extends ConsumerState<LoginPage> {
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  // TODO: remove initial value
+  TextEditingController emailController =
+      TextEditingController(text: "test@test.com");
+  TextEditingController passwordController =
+      TextEditingController(text: "12345678");
   final _formKey = GlobalKey<FormState>();
 
   @override

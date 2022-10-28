@@ -12,6 +12,11 @@ final cartItemControllerProvider =
 class CartItemControllerProvider extends StateNotifier<AsyncValue<void>> {
   CartItemControllerProvider() : super(const AsyncValue.loading());
 
+  Future<void> delete(String productId) async {
+    final service = CartApplicationService();
+    state = await AsyncValue.guard(() => service.delete(productId));
+  }
+
   Future<void> increment(String productId) async {
     final service = CartApplicationService();
     state = await AsyncValue.guard(() => service.increment(productId));
@@ -20,10 +25,5 @@ class CartItemControllerProvider extends StateNotifier<AsyncValue<void>> {
   Future<void> decrement(String productId) async {
     final service = CartApplicationService();
     state = await AsyncValue.guard(() => service.decrement(productId));
-  }
-
-  Future<void> delete(String productId) async {
-    final service = CartApplicationService();
-    state = await AsyncValue.guard(() => service.delete(productId));
   }
 }
