@@ -33,63 +33,68 @@ class ShoppingCartPage extends ConsumerWidget {
       );
     }
 
-    final cartValue = ref.watch(cartProvider);
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('カート'),
-        ),
-        body: SafeArea(
-          child: Center(
-            child: AsyncValueWidget(
-              value: cartValue,
-              data: (productList) {
-                return Column(
-                  children: [
-                    const CartTotalText(),
-                    ElevatedButton(
-                      onPressed: () {},
-                      child: const Padding(
-                        padding: EdgeInsets.only(left: 16.0, right: 16.0),
-                        child: Text(
-                          "レジに進む",
-                          style: TextStyle(fontSize: 24),
-                        ),
-                      ),
-                    ),
-                    const Divider(
-                      thickness: 3,
-                    ),
-                    Expanded(
-                      child: AsyncValueWidget(
-                          value: cartValue,
-                          data: (productList) {
-                            return Scrollbar(
-                              child: ListView.separated(
-                                itemBuilder: (context, index) {
-                                  return CartItem(
-                                    product: productList[index].product,
-                                    num: productList[index].num,
-                                  );
-                                },
-                                separatorBuilder: (context, index) {
-                                  return const Divider(
-                                    thickness: 3,
-                                  );
-                                },
-                                itemCount: productList.length,
-                              ),
-                            );
-                          }),
-                    ),
-                    const Divider(
-                      thickness: 3,
-                    ),
-                  ],
-                );
-              },
-            ),
+      appBar: AppBar(
+        title: const Text('カート'),
+      ),
+      body: SafeArea(
+        child: Center(
+          child: Column(
+            children: [
+              const CartTotalText(),
+              ElevatedButton(
+                onPressed: () {},
+                child: const Padding(
+                  padding: EdgeInsets.only(left: 16.0, right: 16.0),
+                  child: Text(
+                    "レジに進む",
+                    style: TextStyle(fontSize: 24),
+                  ),
+                ),
+              ),
+              const Divider(
+                thickness: 3,
+              ),
+              const Expanded(
+                child: ProductListWidget(),
+              ),
+              const Divider(
+                thickness: 3,
+              ),
+            ],
           ),
-        ));
+        ),
+      ),
+    );
+  }
+}
+
+class ProductListWidget extends ConsumerWidget {
+  const ProductListWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final productListInCart = ref.watch(cartProvider
+        .select((value) => value.value!.map((e) => e.product).toList()));
+    // return AsyncValueWidget(
+    //     value: cartValue,
+    //     data: (productList) {
+    return Scrollbar(
+      child: ListView.separated(
+        itemBuilder: (context, index) {
+          return CartItem(
+            product: productListInCart[index],
+          );
+        },
+        separatorBuilder: (context, index) {
+          return const Divider(
+            thickness: 3,
+          );
+        },
+        itemCount: productListInCart.length,
+      ),
+    );
+    // });
   }
 }
 

@@ -10,9 +10,7 @@ import 'package:sample_shopping_app/src/features/product_list/domain/model/produ
 
 class CartItem extends ConsumerWidget {
   final Product product;
-  final int num;
-  const CartItem({Key? key, required this.product, required this.num})
-      : super(key: key);
+  const CartItem({Key? key, required this.product}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
