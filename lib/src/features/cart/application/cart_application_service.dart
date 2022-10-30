@@ -79,7 +79,7 @@ final cartTotalProvider = Provider<int>((ref) {
 
   int total = 0;
   for (final productInCart in productsInCart) {
-    total += productInCart.product.price;
+    total += productInCart.product.price * productInCart.num;
   }
   return total;
 });
