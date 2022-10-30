@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sample_shopping_app/src/features/cart/application/cart_application_service.dart';
-import 'package:sample_shopping_app/src/features/cart/presentation/cart_item_count_change_controller.dart';
-
-import 'cart_item_controller.dart';
+import 'package:sample_shopping_app/src/features/cart/presentation/shopping_cart_page_controller.dart';
 
 class CartItemCountChangerWidget extends ConsumerWidget {
   final String productId;
@@ -17,7 +15,7 @@ class CartItemCountChangerWidget extends ConsumerWidget {
         IconButton(
             onPressed: () {
               ref
-                  .read(cartItemControllerProvider.notifier)
+                  .read(shoppingCartPageControllerProvider.notifier)
                   .decrement(productId);
             },
             icon: const Icon(Icons.remove)),
@@ -26,7 +24,7 @@ class CartItemCountChangerWidget extends ConsumerWidget {
         ),
         IconButton(
             onPressed: () => ref
-                .read(cartItemControllerProvider.notifier)
+                .read(shoppingCartPageControllerProvider.notifier)
                 .increment(productId),
             icon: const Icon(Icons.add)),
       ],

@@ -40,6 +40,7 @@ class CartApplicationService {
   }
 
   Future<void> increment(String productId) async {
+    await Future.delayed(Duration(seconds: 2));
     final cartItem = await cartRepository.getCartItem(productId);
     final incrementedCartItem = cartItem.increment();
     await cartRepository.update(incrementedCartItem);
@@ -60,7 +61,12 @@ final cartProvider = StreamProvider<List<ProductInCart>>((ref) {
 
 final cartItemsTotalCountProvider = Provider<int>((ref) {
   return ref.watch(cartProvider).maybeMap(
-        data: (cart) => cart.value.length,
+        data: (cart) {
+          if(cart.value.isEmpty) return 0;
+          int total = 0;
+          for (var element in cart.value) {total += element.num;}
+          return total;
+        },
         orElse: () => 0,
       );
 });

@@ -3,10 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sample_shopping_app/src/features/authentication/presentation/acount/account_page.dart';
 import 'package:sample_shopping_app/src/features/cart/application/cart_application_service.dart';
-import 'package:sample_shopping_app/src/features/cart/presentation/cart_item_controller.dart';
 import 'package:sample_shopping_app/src/features/cart/presentation/shopping_cart_page.dart';
-import 'package:sample_shopping_app/src/features/product_list/data/in_memory_product_repository.dart';
-import 'package:sample_shopping_app/src/features/product_list/domain/model/product.dart';
 import 'package:sample_shopping_app/src/features/product_list/presentation/product_list_page.dart';
 
 class BottomNavigationPage extends StatefulWidget {

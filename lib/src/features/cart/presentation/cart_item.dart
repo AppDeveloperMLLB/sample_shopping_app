@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sample_shopping_app/src/common_widgets/image_from_resource.dart';
 import 'package:sample_shopping_app/src/constants/app_sizes.dart';
-import 'package:sample_shopping_app/src/features/cart/application/cart_application_service.dart';
-import 'package:sample_shopping_app/src/features/cart/domain/models/cart_item.dart';
-import 'package:sample_shopping_app/src/features/cart/presentation/cart_item_controller.dart';
 import 'package:sample_shopping_app/src/features/cart/presentation/cart_item_count_changer_widget.dart';
+import 'package:sample_shopping_app/src/features/cart/presentation/shopping_cart_page_controller.dart';
 import 'package:sample_shopping_app/src/features/product_list/domain/model/product.dart';
 
 class CartItem extends ConsumerWidget {
@@ -44,7 +42,7 @@ class CartItem extends ConsumerWidget {
             gapW8,
             IconButton(
                 onPressed: () => ref
-                    .read(cartItemControllerProvider.notifier)
+                    .read(shoppingCartPageControllerProvider.notifier)
                     .delete(product.id),
                 icon: const Icon(Icons.delete))
           ],

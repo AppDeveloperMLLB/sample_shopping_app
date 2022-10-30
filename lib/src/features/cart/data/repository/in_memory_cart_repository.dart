@@ -27,7 +27,12 @@ class InCartRepository implements CartRepository {
     final productRepository =
         RepositoryLocator.instance.get<ProductRepository>();
     final product = await productRepository.fetch(item.productId);
-    _cart.value.add(ProductInCart(product: product, num: item.num));
+    final List<ProductInCart> newList = [];
+    _cart.value.asMap().forEach((i, element) {
+      newList.add(element);
+    });
+    newList.add(ProductInCart(product: product, num: item.num));
+    _cart.value = newList;
   }
 
   @override
@@ -64,6 +69,7 @@ class InCartRepository implements CartRepository {
 
   @override
   Future<void> update(CartItem item) async {
+    await Future.delayed(Duration(seconds: 2));
     final index =
         _cartItems.indexWhere((element) => element.productId == item.productId);
     if (index == -1) {

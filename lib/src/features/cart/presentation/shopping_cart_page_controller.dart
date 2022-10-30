@@ -13,10 +13,27 @@ final shoppingCartPageControllerProvider =
 
 class ShoppingCartPageControllerProvider
     extends StateNotifier<AsyncValue<void>> {
-  ShoppingCartPageControllerProvider() : super(const AsyncValue.loading());
+  ShoppingCartPageControllerProvider() : super(const AsyncData(null));
 
   StreamProvider<List<ProductInCart>> getProductListStreamInCart() {
     final cartApplicationService = CartApplicationService();
     return cartApplicationService.watchCart();
+  }
+
+  Future<void> delete(String productId) async {
+    final service = CartApplicationService();
+    state = await AsyncValue.guard(() => service.delete(productId));
+  }
+
+  Future<void> increment(String productId) async {
+    state = const AsyncLoading();
+    final service = CartApplicationService();
+    state = await AsyncValue.guard(() => service.increment(productId));
+  }
+
+  Future<void> decrement(String productId) async {
+    state = const AsyncLoading();
+    final service = CartApplicationService();
+    state = await AsyncValue.guard(() => service.decrement(productId));
   }
 }
