@@ -1,0 +1,3 @@
+class OrderApplicationService {
+  Future<OrderData>
+}

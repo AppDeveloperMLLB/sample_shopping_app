@@ -7,7 +7,7 @@ abstract class CartRepository {
   Future<void> add(CartItem item);
   Future<void> update(CartItem item);
   Future<CartItem> getCartItem(String productId);
-  Future<void> delete(String productId);
-  Future<void> deleteAll();
+  Future<void> delete(String userId, String productId);
+  Future<void> deleteAll(String userId);
   Future<List<CartItem>> getAllItemsInCart();
 }

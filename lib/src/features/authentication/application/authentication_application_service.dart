@@ -1,4 +1,5 @@
 import 'package:sample_shopping_app/src/features/authentication/domain/model/authentication_info.dart';
+import 'package:sample_shopping_app/src/features/authentication/domain/model/user.dart';
 import 'package:sample_shopping_app/src/features/authentication/domain/repository/authentication_reporisory.dart';
 import 'package:sample_shopping_app/src/locator/repository_locator.dart';
 
@@ -20,12 +21,12 @@ class AuthenticationApplicationService {
     await repo.logout();
   }
 
-  AuthenticationInfo? getCurrentUser() {
+  User? getCurrentUser() {
     final repo = RepositoryLocator.instance.get<AuthenticationRepository>();
     return repo.currentUser;
   }
 
-  Stream<AuthenticationInfo?> authStateChange() {
+  Stream<User?> authStateChange() {
     final repo = RepositoryLocator.instance.get<AuthenticationRepository>();
     return repo.authStateChanges();
   }

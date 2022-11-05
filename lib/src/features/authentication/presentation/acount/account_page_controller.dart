@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sample_shopping_app/src/features/authentication/application/authentication_application_service.dart';
 import 'package:sample_shopping_app/src/features/authentication/domain/model/authentication_info.dart';
+import 'package:sample_shopping_app/src/features/authentication/domain/model/user.dart';
 
 final accountPageControllerProvider =
     StateNotifierProvider<AccountPageControllerProvider, AsyncValue<void>>(
@@ -16,7 +17,7 @@ class AccountPageControllerProvider extends StateNotifier<AsyncValue<void>> {
     state = await AsyncValue.guard(() => authApplicationService.logout());
   }
 
-  AuthenticationInfo? getCurrentUser() {
+  User? getCurrentUser() {
     final authApplicationService = AuthenticationApplicationService();
     return authApplicationService.getCurrentUser();
   }

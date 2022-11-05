@@ -36,4 +36,10 @@ class ShoppingCartPageControllerProvider
     final service = CartApplicationService();
     state = await AsyncValue.guard(() => service.decrement(productId));
   }
+
+  Future<void> order() async {
+    state = const AsyncLoading();
+    final service = CartApplicationService();
+    state = await AsyncValue.guard(() => service.order());
+  }
 }

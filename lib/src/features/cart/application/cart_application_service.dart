@@ -1,15 +1,20 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sample_shopping_app/src/features/authentication/domain/repository/authentication_reporisory.dart';
 import 'package:sample_shopping_app/src/features/cart/application/product_in_cart.dart';
 import 'package:sample_shopping_app/src/features/cart/domain/models/cart_item.dart';
 import 'package:sample_shopping_app/src/features/cart/domain/repository/cart_repository.dart';
+import 'package:sample_shopping_app/src/features/cart/domain/repository/order_repository.dart';
 import 'package:sample_shopping_app/src/features/product_list/domain/model/product.dart';
 import 'package:sample_shopping_app/src/features/product_list/domain/repository/product_repository.dart';
 import 'package:sample_shopping_app/src/locator/repository_locator.dart';
 import 'package:sample_shopping_app/src/utils/in_memory_store.dart';
+import 'package:uuid/uuid.dart';
 
 class CartApplicationService {
   final CartRepository cartRepository =
       RepositoryLocator.instance.get<CartRepository>();
+  final OrderRepository orderRepository =
+      RepositoryLocator.instance.get<OrderRepository>();
 
   StreamProvider<List<ProductInCart>> watchCart() {
     return StreamProvider<List<ProductInCart>>((ref) {
@@ -17,12 +22,26 @@ class CartApplicationService {
     });
   }
 
-  Future<void> add(CartItem cartItem) async {
+  Future<void> add({required String productId, required int num}) async {
+    final authRepository =
+        RepositoryLocator.instance.get<AuthenticationRepository>();
+    if (authRepository.currentUser == null) {
+      throw Exception("Not login");
+    }
+
+    final cartItem = CartItem(
+        userId: authRepository.currentUser!.id, productId: productId, num: num);
     await cartRepository.add(cartItem);
   }
 
   Future<void> delete(String productId) async {
-    await cartRepository.delete(productId);
+    final authRepository =
+        RepositoryLocator.instance.get<AuthenticationRepository>();
+    if (authRepository.currentUser == null) {
+      throw Exception("Not login");
+    }
+
+    await cartRepository.delete(authRepository.currentUser!.id, productId);
   }
 
   Future<List<ProductInCart>> getProductsInCart() async {
@@ -51,6 +70,28 @@ class CartApplicationService {
     final decrementedCartItem = cartItem.decrement();
     await cartRepository.update(decrementedCartItem);
   }
+
+  Future<void> order() async {
+    final cartItems = await cartRepository.getAllItemsInCart();
+    if (cartItems.isEmpty) {
+      throw Exception("Product not exists in cart.");
+    }
+
+    final uuid = const Uuid().v4();
+    final order = Order(
+      id: uuid.toString(),
+      date: DateTime.now(),
+      cartItems: cartItems,
+    );
+    await orderRepository.add(order);
+
+    final authRepository =
+        RepositoryLocator.instance.get<AuthenticationRepository>();
+    if (authRepository.currentUser == null) {
+      throw Exception("Not login");
+    }
+    await cartRepository.deleteAll(authRepository.currentUser!.id);
+  }
 }
 
 final cartProvider = StreamProvider<List<ProductInCart>>((ref) {
@@ -62,9 +103,11 @@ final cartProvider = StreamProvider<List<ProductInCart>>((ref) {
 final cartItemsTotalCountProvider = Provider<int>((ref) {
   return ref.watch(cartProvider).maybeMap(
         data: (cart) {
-          if(cart.value.isEmpty) return 0;
+          if (cart.value.isEmpty) return 0;
           int total = 0;
-          for (var element in cart.value) {total += element.num;}
+          for (var element in cart.value) {
+            total += element.num;
+          }
           return total;
         },
         orElse: () => 0,

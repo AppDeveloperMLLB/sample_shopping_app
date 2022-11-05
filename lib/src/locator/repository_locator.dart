@@ -1,5 +1,6 @@
 import 'package:sample_shopping_app/src/features/authentication/domain/repository/authentication_reporisory.dart';
 import 'package:sample_shopping_app/src/features/cart/domain/repository/cart_repository.dart';
+import 'package:sample_shopping_app/src/features/cart/domain/repository/order_repository.dart';
 import 'package:sample_shopping_app/src/features/product_list/domain/repository/product_repository.dart';
 
 class RepositoryLocator {
@@ -16,10 +17,12 @@ class RepositoryLocator {
     required AuthenticationRepository authenticationRepository,
     required ProductRepository productRepository,
     required CartRepository cartRepository,
+    required OrderRepository orderRepository,
   }) {
     _repositories.add(authenticationRepository);
     _repositories.add(productRepository);
     _repositories.add(cartRepository);
+    _repositories.add(orderRepository);
   }
 
   T get<T>() {

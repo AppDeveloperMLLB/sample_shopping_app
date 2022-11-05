@@ -3,15 +3,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sample_shopping_app/src/app.dart';
 import 'package:sample_shopping_app/src/features/authentication/data/repository/in_memory_authentication_repository.dart';
 import 'package:sample_shopping_app/src/features/cart/data/repository/in_memory_cart_repository.dart';
+import 'package:sample_shopping_app/src/features/cart/data/repository/in_memory_order_repository.dart';
 import 'package:sample_shopping_app/src/features/product_list/data/in_memory_product_repository.dart';
 import 'package:sample_shopping_app/src/locator/repository_locator.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   RepositoryLocator.instance.addAll(
-      authenticationRepository: InMemoryAuthenticationRepository.instance,
-      productRepository: InMemoryProductRepository(),
+    authenticationRepository: InMemoryAuthenticationRepository.instance,
+    productRepository: InMemoryProductRepository(),
     cartRepository: InCartRepository.instance,
+    orderRepository: InMemoryOrderRepository.instance,
   );
   runApp(const ProviderScope(child: MyApp()));
 }

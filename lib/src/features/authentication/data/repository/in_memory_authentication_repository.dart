@@ -1,26 +1,29 @@
 import 'package:sample_shopping_app/src/features/authentication/domain/model/authentication_info.dart';
+import 'package:sample_shopping_app/src/features/authentication/domain/model/user.dart';
 import 'package:sample_shopping_app/src/features/authentication/domain/repository/authentication_reporisory.dart';
 import 'package:sample_shopping_app/src/utils/in_memory_store.dart';
+import 'package:uuid/uuid.dart';
 
 class InMemoryAuthenticationRepository implements AuthenticationRepository {
   InMemoryAuthenticationRepository._();
   static final instance = InMemoryAuthenticationRepository._();
-  final List<AuthenticationInfo> _userList = [
-    AuthenticationInfo(email: "test@test.com", password: "12345678"),
+  final List<User> _userList = [
+    User(id: "0001", email: "test@test.com", password: "12345678"),
   ];
-  final _authState = InMemoryStore<AuthenticationInfo?>(null);
+  final _authState = InMemoryStore<User?>(null);
 
   @override
-  Stream<AuthenticationInfo?> authStateChanges() => _authState.stream;
+  Stream<User?> authStateChanges() => _authState.stream;
 
   @override
-  AuthenticationInfo? get currentUser => _authState.value;
+  User? get currentUser => _authState.value;
 
   @override
   Future<void> login(AuthenticationInfo info) async {
     await Future.delayed(const Duration(seconds: 2));
-    if (userExists(info)) {
-      _authState.value = info;
+    final loginUser = getUser(info);
+    if (loginUser != null) {
+      _authState.value = loginUser;
       return;
     }
 
@@ -36,15 +39,19 @@ class InMemoryAuthenticationRepository implements AuthenticationRepository {
   @override
   Future<void> register(AuthenticationInfo info) async {
     await Future.delayed(const Duration(seconds: 2));
-    if (userExists(info)) {
+
+    if (getUser(info) != null) {
       throw Exception("User exists.");
     }
 
-    _userList.add(info);
-    _authState.value = info;
+    final newId = Uuid().v4();
+    final newUser = User(id: newId, email: info.email, password: info.password);
+    _userList.add(newUser);
+    _authState.value = newUser;
   }
 
-  bool userExists(AuthenticationInfo info) {
-    return _userList.any((element) => element.email == info.email);
+  User? getUser(AuthenticationInfo info) {
+    return _userList.firstWhere((element) =>
+        element.email == info.email && element.password == info.password);
   }
 }

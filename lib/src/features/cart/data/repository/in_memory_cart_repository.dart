@@ -36,9 +36,9 @@ class InCartRepository implements CartRepository {
   }
 
   @override
-  Future<void> delete(String productId) async {
-    final index =
-        _cartItems.indexWhere((element) => element.productId == productId);
+  Future<void> delete(String userId, String productId) async {
+    final index = _cartItems.indexWhere((element) =>
+        element.userId == userId && element.productId == productId);
     if (index == -1) {
       throw Exception("Failed to delete product in cart");
     }
@@ -47,9 +47,21 @@ class InCartRepository implements CartRepository {
   }
 
   @override
-  Future<void> deleteAll() async {
-    // TODO: implement deleteAll
-    throw UnimplementedError();
+  Future<void> deleteAll(String userId) async {
+    _cartItems.removeWhere((element) => element.userId == userId);
+    _cart.value = await toProductInCart(_cartItems);
+  }
+
+  Future<List<ProductInCart>> toProductInCart(List<CartItem> cartItems) async {
+    List<ProductInCart> ret = [];
+    final productRepo = RepositoryLocator.instance.get<ProductRepository>();
+
+    for (final item in cartItems) {
+      final product = await productRepo.fetch(item.productId);
+      ret.add(ProductInCart(product: product, num: item.num));
+    }
+
+    return ret;
   }
 
   @override
@@ -89,8 +101,6 @@ class InCartRepository implements CartRepository {
 
       newList.add(element);
     });
-
-    //_cart.value.clear();
     _cart.value = newList;
   }
 }

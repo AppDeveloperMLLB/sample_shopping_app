@@ -16,8 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$CartItem {
-// add param like bellow example.
-//@JsonKey(name: 'id') required String id,
+  String get userId => throw _privateConstructorUsedError;
   String get productId => throw _privateConstructorUsedError;
   int get num => throw _privateConstructorUsedError;
 
@@ -30,7 +29,7 @@ mixin _$CartItem {
 abstract class $CartItemCopyWith<$Res> {
   factory $CartItemCopyWith(CartItem value, $Res Function(CartItem) then) =
       _$CartItemCopyWithImpl<$Res>;
-  $Res call({String productId, int num});
+  $Res call({String userId, String productId, int num});
 }
 
 /// @nodoc
@@ -43,10 +42,15 @@ class _$CartItemCopyWithImpl<$Res> implements $CartItemCopyWith<$Res> {
 
   @override
   $Res call({
+    Object? userId = freezed,
     Object? productId = freezed,
     Object? num = freezed,
   }) {
     return _then(_value.copyWith(
+      userId: userId == freezed
+          ? _value.userId
+          : userId // ignore: cast_nullable_to_non_nullable
+              as String,
       productId: productId == freezed
           ? _value.productId
           : productId // ignore: cast_nullable_to_non_nullable
@@ -65,7 +69,7 @@ abstract class _$$_CartItemCopyWith<$Res> implements $CartItemCopyWith<$Res> {
           _$_CartItem value, $Res Function(_$_CartItem) then) =
       __$$_CartItemCopyWithImpl<$Res>;
   @override
-  $Res call({String productId, int num});
+  $Res call({String userId, String productId, int num});
 }
 
 /// @nodoc
@@ -80,10 +84,15 @@ class __$$_CartItemCopyWithImpl<$Res> extends _$CartItemCopyWithImpl<$Res>
 
   @override
   $Res call({
+    Object? userId = freezed,
     Object? productId = freezed,
     Object? num = freezed,
   }) {
     return _then(_$_CartItem(
+      userId: userId == freezed
+          ? _value.userId
+          : userId // ignore: cast_nullable_to_non_nullable
+              as String,
       productId: productId == freezed
           ? _value.productId
           : productId // ignore: cast_nullable_to_non_nullable
@@ -99,10 +108,12 @@ class __$$_CartItemCopyWithImpl<$Res> extends _$CartItemCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_CartItem extends _CartItem {
-  const _$_CartItem({required this.productId, required this.num}) : super._();
+  const _$_CartItem(
+      {required this.userId, required this.productId, required this.num})
+      : super._();
 
-// add param like bellow example.
-//@JsonKey(name: 'id') required String id,
+  @override
+  final String userId;
   @override
   final String productId;
   @override
@@ -110,7 +121,7 @@ class _$_CartItem extends _CartItem {
 
   @override
   String toString() {
-    return 'CartItem(productId: $productId, num: $num)';
+    return 'CartItem(userId: $userId, productId: $productId, num: $num)';
   }
 
   @override
@@ -118,6 +129,7 @@ class _$_CartItem extends _CartItem {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_CartItem &&
+            const DeepCollectionEquality().equals(other.userId, userId) &&
             const DeepCollectionEquality().equals(other.productId, productId) &&
             const DeepCollectionEquality().equals(other.num, num));
   }
@@ -125,6 +137,7 @@ class _$_CartItem extends _CartItem {
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      const DeepCollectionEquality().hash(userId),
       const DeepCollectionEquality().hash(productId),
       const DeepCollectionEquality().hash(num));
 
@@ -136,11 +149,14 @@ class _$_CartItem extends _CartItem {
 
 abstract class _CartItem extends CartItem {
   const factory _CartItem(
-      {required final String productId, required final int num}) = _$_CartItem;
+      {required final String userId,
+      required final String productId,
+      required final int num}) = _$_CartItem;
   const _CartItem._() : super._();
 
-  @override // add param like bellow example.
-//@JsonKey(name: 'id') required String id,
+  @override
+  String get userId;
+  @override
   String get productId;
   @override
   int get num;

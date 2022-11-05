@@ -20,7 +20,7 @@ class ShoppingCartPage extends ConsumerWidget {
           child: AsyncValueWidget(
             value: controller,
             data: (state) {
-              return ProductListWidget();
+              return const ProductListWidget();
             },
           ),
         ),
@@ -37,8 +37,8 @@ class ProductListWidget extends ConsumerWidget {
     final cart = ref.watch(cartProvider);
     final productsInCart = cart.value!;
 
-    if(productsInCart.isEmpty){
-      return  const Text(
+    if (productsInCart.isEmpty) {
+      return const Text(
         "商品がありません",
         style: TextStyle(fontSize: 16),
       );
@@ -48,11 +48,13 @@ class ProductListWidget extends ConsumerWidget {
       children: [
         const CartTotalText(),
         ElevatedButton(
-          onPressed: () {},
+          onPressed: () {
+            ref.read(shoppingCartPageControllerProvider.notifier).order();
+          },
           child: const Padding(
             padding: EdgeInsets.only(left: 16.0, right: 16.0),
             child: Text(
-              "レジに進む",
+              "注文する",
               style: TextStyle(fontSize: 24),
             ),
           ),

@@ -6,8 +6,7 @@ part 'cart_item.freezed.dart';
 class CartItem with _$CartItem {
   const CartItem._();
   const factory CartItem({
-    // add param like bellow example.
-    //@JsonKey(name: 'id') required String id,
+    required String userId,
     required String productId,
     required int num,
   }) = _CartItem;
