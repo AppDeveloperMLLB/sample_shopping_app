@@ -18,4 +18,9 @@ class InMemoryOrderRepository implements OrderRepository {
     _orderList.add(order);
     _order.value = _orderList;
   }
+
+  @override
+  Stream<List<Order>> watchOrder() {
+    return _order.stream;
+  }
 }

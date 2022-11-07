@@ -43,6 +43,10 @@ class CartItemCountText extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(cartProvider.select(
       (value) {
+        if(value.value == null || value.value!.isEmpty){
+          return 0;
+        }
+
         return value.value!
             .firstWhere((element) => element.product.id == productId)
             ?.num;

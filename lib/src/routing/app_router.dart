@@ -73,6 +73,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
                 );
               },
             ),
+
           ]),
       // GoRoute(
       //   path: '/',

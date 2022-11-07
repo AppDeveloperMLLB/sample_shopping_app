@@ -3,12 +3,21 @@ import 'package:sample_shopping_app/src/features/cart/domain/models/cart_item.da
 
 abstract class OrderRepository {
   Future<void> add(Order order);
+  Stream<List<Order>> watchOrder();
 }
 
 class Order {
   final String id;
+  final String userId;
   final DateTime date;
-  final List<CartItem> cartItems;
+  final String productId;
+  final int num;
 
-  Order({required this.id, required this.date, required this.cartItems});
+  Order({
+    required this.id,
+    required this.userId,
+    required this.date,
+    required this.productId,
+    required this.num,
+  });
 }

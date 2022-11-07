@@ -72,25 +72,37 @@ class CartApplicationService {
   }
 
   Future<void> order() async {
+    final authRepository =
+    RepositoryLocator.instance.get<AuthenticationRepository>();
+    if (authRepository.currentUser == null) {
+      throw Exception("Not login");
+    }
+
+    final userId = authRepository.currentUser!.id;
+
     final cartItems = await cartRepository.getAllItemsInCart();
     if (cartItems.isEmpty) {
       throw Exception("Product not exists in cart.");
     }
 
-    final uuid = const Uuid().v4();
-    final order = Order(
-      id: uuid.toString(),
-      date: DateTime.now(),
-      cartItems: cartItems,
-    );
-    await orderRepository.add(order);
-
-    final authRepository =
-        RepositoryLocator.instance.get<AuthenticationRepository>();
-    if (authRepository.currentUser == null) {
-      throw Exception("Not login");
+    for(final item in cartItems) {
+      final order = createOrder(userId, item);
+      await orderRepository.add(order);
     }
-    await cartRepository.deleteAll(authRepository.currentUser!.id);
+
+
+    await cartRepository.deleteAll(userId);
+  }
+
+  Order createOrder(String userId, CartItem cartItem){
+    final uuid = const Uuid().v4();
+    return Order(
+      id: uuid.toString(),
+      userId: userId,
+      date: DateTime.now(),
+      productId: cartItem.productId,
+      num: cartItem.num,
+    );
   }
 }
 
