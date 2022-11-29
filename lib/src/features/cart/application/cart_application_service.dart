@@ -3,11 +3,10 @@ import 'package:sample_shopping_app/src/features/authentication/domain/repositor
 import 'package:sample_shopping_app/src/features/cart/application/product_in_cart.dart';
 import 'package:sample_shopping_app/src/features/cart/domain/models/cart_item.dart';
 import 'package:sample_shopping_app/src/features/cart/domain/repository/cart_repository.dart';
-import 'package:sample_shopping_app/src/features/cart/domain/repository/order_repository.dart';
-import 'package:sample_shopping_app/src/features/product_list/domain/model/product.dart';
+import 'package:sample_shopping_app/src/features/order/domain/model/order.dart';
+import 'package:sample_shopping_app/src/features/order/domain/repository/order_repository.dart';
 import 'package:sample_shopping_app/src/features/product_list/domain/repository/product_repository.dart';
 import 'package:sample_shopping_app/src/locator/repository_locator.dart';
-import 'package:sample_shopping_app/src/utils/in_memory_store.dart';
 import 'package:uuid/uuid.dart';
 
 class CartApplicationService {
@@ -59,7 +58,7 @@ class CartApplicationService {
   }
 
   Future<void> increment(String productId) async {
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 2));
     final cartItem = await cartRepository.getCartItem(productId);
     final incrementedCartItem = cartItem.increment();
     await cartRepository.update(incrementedCartItem);
@@ -73,7 +72,7 @@ class CartApplicationService {
 
   Future<void> order() async {
     final authRepository =
-    RepositoryLocator.instance.get<AuthenticationRepository>();
+        RepositoryLocator.instance.get<AuthenticationRepository>();
     if (authRepository.currentUser == null) {
       throw Exception("Not login");
     }
@@ -85,16 +84,15 @@ class CartApplicationService {
       throw Exception("Product not exists in cart.");
     }
 
-    for(final item in cartItems) {
+    for (final item in cartItems) {
       final order = createOrder(userId, item);
-      await orderRepository.add(order);
+      await orderRepository.addOrder(order);
     }
-
 
     await cartRepository.deleteAll(userId);
   }
 
-  Order createOrder(String userId, CartItem cartItem){
+  Order createOrder(String userId, CartItem cartItem) {
     final uuid = const Uuid().v4();
     return Order(
       id: uuid.toString(),
@@ -145,7 +143,7 @@ final itemCountProvider =
   if (cart != null) {
     final product =
         cart.firstWhere((element) => element.product.id == productId);
-    return product?.num ?? 1;
+    return product.num ?? 1;
   }
 
   return 1;

@@ -1,0 +1,4 @@
+enum DeliveryStatus {
+  undelivered,
+  delivered,
+}

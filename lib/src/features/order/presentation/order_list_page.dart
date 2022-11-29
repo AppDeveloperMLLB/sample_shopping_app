@@ -7,7 +7,7 @@ class OrderListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(""),),
+      appBar: AppBar(title: const Text("注文一覧"),),
       body: const SafeArea(
         child: OrderList(),
       ),

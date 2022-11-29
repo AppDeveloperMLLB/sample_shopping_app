@@ -1,10 +1,15 @@
-import 'package:sample_shopping_app/src/features/cart/application/product_in_cart.dart';
-
-class OrderData {
+class OrderDataForOrderList {
   final String userId;
   final DateTime dateTime;
-  final List<ProductInCart> products;
+  final String productName;
+  final int productPrice;
+  final String imageResource;
 
-  OrderData(
-      {required this.userId, required this.dateTime, required this.products});
+  OrderDataForOrderList({
+    required this.userId,
+    required this.dateTime,
+    required this.productName,
+    required this.productPrice,
+    required this.imageResource,
+  });
 }

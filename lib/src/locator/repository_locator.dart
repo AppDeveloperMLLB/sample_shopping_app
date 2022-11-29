@@ -1,6 +1,6 @@
 import 'package:sample_shopping_app/src/features/authentication/domain/repository/authentication_reporisory.dart';
 import 'package:sample_shopping_app/src/features/cart/domain/repository/cart_repository.dart';
-import 'package:sample_shopping_app/src/features/cart/domain/repository/order_repository.dart';
+import 'package:sample_shopping_app/src/features/order/domain/repository/order_repository.dart';
 import 'package:sample_shopping_app/src/features/product_list/domain/repository/product_repository.dart';
 
 class RepositoryLocator {
