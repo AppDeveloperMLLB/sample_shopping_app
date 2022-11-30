@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sample_shopping_app/src/common_widgets/async_value_widget.dart';
 import 'package:sample_shopping_app/src/common_widgets/image_from_resource.dart';
 import 'package:sample_shopping_app/src/constants/app_sizes.dart';
 import 'package:sample_shopping_app/src/features/product_list/domain/model/product.dart';
 import 'package:sample_shopping_app/src/features/product_list/presentation/product_page_controller.dart';
+import 'package:sample_shopping_app/src/routing/app_router.dart';
 import 'package:sample_shopping_app/src/utils/async_value_ui.dart';
 
 class ProductPage extends ConsumerWidget {
@@ -48,7 +50,7 @@ class ProductPage extends ConsumerWidget {
                             .addCart(
                           product: product,
                           num: 1,
-                          onSuccess: () => Navigator.of(context).pop(),
+                          onSuccess: () => context.goNamed(AppRoute.product.name),
                         );
                       },
                       child: Text("Add to cart")),

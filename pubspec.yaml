@@ -52,7 +52,7 @@ dependencies:
   # パスを操作するために使用
   path: ^1.8.1
   # 画面遷移に使用
-  go_router:
+  go_router: ^5.2.0
   rxdart:
   badges: ^2.0.3
   intl:
