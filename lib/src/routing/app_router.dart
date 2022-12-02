@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:sample_shopping_app/src/app.dart';
 import 'package:sample_shopping_app/src/features/authentication/domain/model/user.dart';
 import 'package:sample_shopping_app/src/features/authentication/domain/repository/authentication_reporisory.dart';
@@ -7,6 +9,7 @@ import 'package:sample_shopping_app/src/features/cart/presentation/shopping_cart
 import 'package:sample_shopping_app/src/features/delivery/presentation/delivery_manager_page.dart';
 import 'package:sample_shopping_app/src/features/order/presentation/order_list_page.dart';
 import 'package:sample_shopping_app/src/features/product_list/domain/model/product.dart';
+import 'package:sample_shopping_app/src/features/product_list/presentation/product_list_page.dart';
 import 'package:sample_shopping_app/src/features/product_list/presentation/product_page.dart';
 import 'package:sample_shopping_app/src/locator/repository_locator.dart';
 import 'package:sample_shopping_app/src/routing/not_found_screen.dart';
@@ -15,6 +18,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 enum AppRoute {
+  productList,
   product,
   cart,
   account,
@@ -29,7 +33,8 @@ class AppLocation {
 }
 
 Map<AppRoute, AppLocation> appRoutes = {
-  AppRoute.product: AppLocation(location: "/product"),
+  AppRoute.productList: AppLocation(location: "/product-list"),
+  AppRoute.product: AppLocation(location: "/product-list/product"),
   AppRoute.cart: AppLocation(location: "/cart"),
   AppRoute.account: AppLocation(location: "/account"),
   AppRoute.order: AppLocation(location: "/order"),
@@ -53,7 +58,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       final isLoggedIn = authRepository.currentUser != null;
       if (isLoggedIn) {
         if (state.location == appRoutes[AppRoute.login]?.location) {
-          return appRoutes[AppRoute.product]!.location;
+          return appRoutes[AppRoute.productList]!.location;
         }
       } else {
         if (state.location != appRoutes[AppRoute.login]!.location) {
@@ -62,7 +67,7 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       }
       return null;
     },
-    refreshListenable: ref.listen(provider, (previous, next) { }),
+    refreshListenable: GoRouterRefreshStream(authRepository.authStateChanges()),
     routes: <RouteBase>[
       ShellRoute(
         navigatorKey: _shellNavigatorKey,
@@ -70,17 +75,27 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         routes: <RouteBase>[
           // Product
           GoRoute(
-            path: appRoutes[AppRoute.product]!.location,
-            name: AppRoute.product.name,
-            pageBuilder: (context, state) {
-              final product = state.extra! as Product;
-              return MaterialPage(
-                child: ProductPage(
-                  product: product,
+              path: appRoutes[AppRoute.productList]!.location,
+              name: AppRoute.productList.name,
+              pageBuilder: (context, state) {
+                return const MaterialPage(
+                  child: ProductListPage(),
+                );
+              },
+              routes: <RouteBase>[
+                GoRoute(
+                  path: 'product',
+                  name: AppRoute.product.name,
+                  pageBuilder: (context, state) {
+                    final product = state.extra! as Product;
+                    return MaterialPage(
+                      child: ProductPage(
+                        product: product,
+                      ),
+                    );
+                  },
                 ),
-              );
-            },
-          ),
+              ]),
           // Cart
           GoRoute(
             path: appRoutes[AppRoute.cart]!.location,
@@ -149,29 +164,19 @@ final authProvider = StreamProvider<User?>(
   },
 );
 
-final sampleProvider = NotifierProvider<Sample, User?>(() => Sample());
-
-class Sample extends Notifier<User?> {
-  @override
-  User? build() {
-    return null;
-  }
-}
-final a = ChangeNotifierProvider(((ref) {
-  ref.listen(, (previous, next) { 
-
-        final authRepository =
-        RepositoryLocator.instance.get<AuthenticationRepository>();
-    authRepository.authStateChanges().listen((event) {
-      
-    })
-  })
-});
-// ignore: camel_case_types
-class ChangeSample extends ChangeNotifier {
-  User? _loginUser;
-  void update(User? user){
-    _loginUser = user;
+class GoRouterRefreshStream extends ChangeNotifier {
+  GoRouterRefreshStream(Stream<dynamic> stream) {
     notifyListeners();
+    _subscription = stream.asBroadcastStream().listen(
+          (dynamic _) => notifyListeners(),
+        );
+  }
+
+  late final StreamSubscription<dynamic> _subscription;
+
+  @override
+  void dispose() {
+    _subscription.cancel();
+    super.dispose();
   }
 }

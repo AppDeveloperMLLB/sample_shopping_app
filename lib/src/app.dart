@@ -79,7 +79,7 @@ class ScaffoldWithNavBar extends StatelessWidget {
   static int _calculateSelectedIndex(BuildContext context) {
     final GoRouter route = GoRouter.of(context);
     final String location = route.location;
-    if (location.startsWith(appRoutes[AppRoute.product]!.location)) {
+    if (location.startsWith(appRoutes[AppRoute.productList]!.location)) {
       return 0;
     }
     if (location.startsWith(appRoutes[AppRoute.cart]!.location)) {
@@ -101,7 +101,7 @@ class ScaffoldWithNavBar extends StatelessWidget {
     String routeName = "";
     switch (index) {
       case 0:
-        routeName = AppRoute.product.name;
+        routeName = AppRoute.productList.name;
         break;
       case 1:
         routeName = AppRoute.cart.name;

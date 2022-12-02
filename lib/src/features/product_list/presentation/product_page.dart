@@ -29,7 +29,7 @@ class ProductPage extends ConsumerWidget {
       body: SafeArea(
         child: Center(
           child: AsyncValueWidget(
-            data: (value){
+            data: (value) {
               return Column(
                 children: [
                   gapH8,
@@ -48,12 +48,13 @@ class ProductPage extends ConsumerWidget {
                         ref
                             .read(productPageControllerProvider.notifier)
                             .addCart(
-                          product: product,
-                          num: 1,
-                          onSuccess: () => context.goNamed(AppRoute.product.name),
-                        );
+                              product: product,
+                              num: 1,
+                              onSuccess: () =>
+                                  context.goNamed(AppRoute.productList.name),
+                            );
                       },
-                      child: Text("Add to cart")),
+                      child: const Text("Add to cart")),
                 ],
               );
             },

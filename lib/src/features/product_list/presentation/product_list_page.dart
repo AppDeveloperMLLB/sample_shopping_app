@@ -27,7 +27,7 @@ class _SampleListPageState extends ConsumerState<ProductListPage>
 
   @override
   void dispose() {
-    animationController?.dispose();
+    animationController.dispose();
     super.dispose();
   }
 
@@ -48,15 +48,15 @@ class _SampleListPageState extends ConsumerState<ProductListPage>
           final int count = products.length > 10 ? 10 : products.length;
           final Animation<double> animation =
               Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-                  parent: animationController!,
+                  parent: animationController,
                   curve: Interval((1 / count) * index, 1.0,
                       curve: Curves.fastOutSlowIn)));
-          animationController?.forward();
+          animationController.forward();
           return SampleListView(
             callback: (Product product) => onProductTapped(product),
             product: products[index],
             animation: animation,
-            animationController: animationController!,
+            animationController: animationController,
           );
         },
       ),
@@ -64,7 +64,7 @@ class _SampleListPageState extends ConsumerState<ProductListPage>
   }
 
   void onProductTapped(Product product) {
-    context.goNamed(AppRoute.product.name, extra: product);
+    context.goNamed(AppRoute.productList.name, extra: product);
   }
 }
 
@@ -94,7 +94,7 @@ class SampleListView extends StatelessWidget {
                 0.0, 50 * (1.0 - animation!.value), 0.0),
             child: ProductCard(
               product: product,
-              onTapped: callback!,
+              onTapped: callback,
             ),
           ),
         );
