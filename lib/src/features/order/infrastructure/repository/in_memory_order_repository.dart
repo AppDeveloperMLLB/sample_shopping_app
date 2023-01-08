@@ -89,4 +89,19 @@ class InMemoryOrderRepository implements OrderRepository {
     if (index == -1) return null;
     return _undeliveedOrderList[index];
   }
+
+  @override
+  Future<void> deleteDeliveredOrder(Order order) async {
+    final index =
+        _deliveredOrderList.indexWhere((element) => element.id == order.id);
+    _deliveredOrderList.removeAt(index);
+    updateOrderValue();
+  }
+
+  @override
+  Future<Order?> fetchDeliveredOrder(String orderId) async {
+    final index =
+        _deliveredOrderList.indexWhere((element) => element.id == orderId);
+    return index == -1 ? null : _deliveredOrderList[index];
+  }
 }

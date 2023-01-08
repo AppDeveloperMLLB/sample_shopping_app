@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sample_shopping_app/src/features/authentication/domain/repository/authentication_reporisory.dart';
 import 'package:sample_shopping_app/src/features/delivery/application/delivery_application_service.dart';
+import 'package:sample_shopping_app/src/features/delivery/domain/delivery_status.dart';
 import 'package:sample_shopping_app/src/features/delivery/presentation/order_data.dart';
 import 'package:sample_shopping_app/src/features/order/application/order_application_service.dart';
 import 'package:sample_shopping_app/src/features/order/domain/model/order.dart';
@@ -24,8 +25,14 @@ class DeliveryManagerController extends StateNotifier<void> {
     // 4. return a value (or do nothing if the return type is void)
   }
 
-  Future<void> changeDeliveryState(String orderId) async {
-    await DelivelyApplicationService().delivery(orderId);
+  Future<void> changeDeliveryState(
+      String orderId, DeliveryStatus status) async {
+    if (status == DeliveryStatus.delivered) {
+      await DelivelyApplicationService().delivery(orderId);
+      return;
+    }
+
+    await DelivelyApplicationService().undelivery(orderId);
   }
 }
 

@@ -21,15 +21,16 @@ class DelivelyApplicationService {
 
   Future<void> undelivery(String orderId) async {
     final orderRepository = RepositoryLocator.instance.get<OrderRepository>();
-    final order = await orderRepository.fetchUndeliveredOrder(orderId);
+    final order = await orderRepository.fetchDeliveredOrder(orderId);
     if (order == null) {
       throw Exception("order is null");
     }
-    orderRepository.addDeliverdOrder(order);
+    orderRepository.addUndeliveredOrder(order);
+    orderRepository.deleteDeliveredOrder(order);
     orderRepository.updateOrderStatus(
       OrderStatusData(
         orderId: order.id,
-        status: OrderStatus.delivered,
+        status: OrderStatus.undelivered,
       ),
     );
   }

@@ -61,7 +61,7 @@ class DeliveryManagerPage extends ConsumerWidget {
                         onChanged: (DeliveryStatus? value) {
                           ref
                               .read(deliveryManagerControllerProvider.notifier)
-                              .changeDeliveryState(orderData.orderId);
+                              .changeDeliveryState(orderData.orderId, value!);
                         },
                         value: parse(orderData.orderStatus),
                       ),

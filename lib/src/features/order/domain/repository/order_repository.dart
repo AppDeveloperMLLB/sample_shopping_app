@@ -10,6 +10,8 @@ abstract class OrderRepository {
   Future<OrderStatusData?> fetchOrderStatus(String orderId);
   Future<void> addCanceledOrder(Order order);
   Future<void> addDeliverdOrder(Order order);
+  Future<Order?> fetchDeliveredOrder(String orderId);
+  Future<void> deleteDeliveredOrder(Order order);
   Stream<List<Order>> watchOrder();
 }
 
