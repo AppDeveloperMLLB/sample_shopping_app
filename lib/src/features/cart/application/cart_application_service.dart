@@ -3,6 +3,7 @@ import 'package:sample_shopping_app/src/features/authentication/domain/repositor
 import 'package:sample_shopping_app/src/features/cart/application/product_in_cart.dart';
 import 'package:sample_shopping_app/src/features/cart/domain/models/cart_item.dart';
 import 'package:sample_shopping_app/src/features/cart/domain/repository/cart_repository.dart';
+import 'package:sample_shopping_app/src/features/order/application/order_status_data.dart';
 import 'package:sample_shopping_app/src/features/order/domain/model/order.dart';
 import 'package:sample_shopping_app/src/features/order/domain/repository/order_repository.dart';
 import 'package:sample_shopping_app/src/features/product_list/domain/repository/product_repository.dart';
@@ -86,7 +87,13 @@ class CartApplicationService {
 
     for (final item in cartItems) {
       final order = createOrder(userId, item);
-      await orderRepository.addOrder(order);
+      await orderRepository.addUndeliveredOrder(order);
+      await orderRepository.addOrderStatus(
+        OrderStatusData(
+          orderId: order.id,
+          status: OrderStatus.undelivered,
+        ),
+      );
     }
 
     await cartRepository.deleteAll(userId);

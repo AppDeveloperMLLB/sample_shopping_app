@@ -64,7 +64,7 @@ class _SampleListPageState extends ConsumerState<ProductListPage>
   }
 
   void onProductTapped(Product product) {
-    context.goNamed(AppRoute.productList.name, extra: product);
+    context.goNamed(AppRoute.product.name, extra: product);
   }
 }
 

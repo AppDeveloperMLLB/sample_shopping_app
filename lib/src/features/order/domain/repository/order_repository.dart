@@ -2,8 +2,9 @@ import 'package:sample_shopping_app/src/features/order/application/order_status_
 import 'package:sample_shopping_app/src/features/order/domain/model/order.dart';
 
 abstract class OrderRepository {
-  Future<void> addOrder(Order order);
-  Future<void> deleteOrder(Order order);
+  Future<Order?> fetchUndeliveredOrder(String orderId);
+  Future<void> addUndeliveredOrder(Order order);
+  Future<void> deleteUndeliveredOrder(Order order);
   Future<void> addOrderStatus(OrderStatusData status);
   Future<void> updateOrderStatus(OrderStatusData status);
   Future<OrderStatusData?> fetchOrderStatus(String orderId);
@@ -15,5 +16,20 @@ abstract class OrderRepository {
 enum OrderStatus {
   undelivered,
   delivered,
-  canceled,
+  canceled;
+
+  @override
+  String toString() {
+    if (this == OrderStatus.undelivered) {
+      return "配達中";
+    }
+    if (this == OrderStatus.delivered) {
+      return "配達済み";
+    }
+    if (this == OrderStatus.canceled) {
+      return "キャンセル済み";
+    }
+
+    return "";
+  }
 }

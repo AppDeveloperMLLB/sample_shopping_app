@@ -3,6 +3,7 @@ import 'package:sample_shopping_app/src/features/authentication/domain/repositor
 import 'package:sample_shopping_app/src/features/order/application/order_application_service.dart';
 import 'package:sample_shopping_app/src/features/order/application/order_data.dart';
 import 'package:sample_shopping_app/src/features/order/domain/model/order.dart';
+import 'package:sample_shopping_app/src/features/order/domain/repository/order_repository.dart';
 import 'package:sample_shopping_app/src/features/product_list/domain/repository/product_repository.dart';
 import 'package:sample_shopping_app/src/locator/repository_locator.dart';
 
@@ -51,15 +52,18 @@ final orderDataListProvider =
   }));
 
   final productRepo = RepositoryLocator.instance.get<ProductRepository>();
+  final orderRepo = RepositoryLocator.instance.get<OrderRepository>();
   final List<OrderDataForOrderList> orderDataList = [];
   for (final order in orderList) {
     var product = await productRepo.fetch(order.productId);
+    final status = await orderRepo.fetchOrderStatus(order.id);
     orderDataList.add(OrderDataForOrderList(
       userId: userId,
       dateTime: order.date,
       productName: product.name,
       productPrice: product.price,
       imageResource: product.imageResource,
+      status: status!.status,
     ));
   }
 

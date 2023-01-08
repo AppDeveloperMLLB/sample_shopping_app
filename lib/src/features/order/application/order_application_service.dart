@@ -6,8 +6,10 @@ import 'package:sample_shopping_app/src/locator/repository_locator.dart';
 
 class OrderApplicationService {
   final orderRepository = RepositoryLocator.instance.get<OrderRepository>();
+
   Future<void> cancelOrder(Order order) async {
     await orderRepository.addCanceledOrder(order);
+    await orderRepository.deleteUndeliveredOrder(order);
     await _updateOrderStatus(order.id, OrderStatus.canceled);
   }
 

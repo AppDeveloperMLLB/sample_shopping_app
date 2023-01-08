@@ -20,7 +20,7 @@ class ProductCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(left: 24, right: 24, top: 8, bottom: 16),
       child: InkWell(
-        splashColor: Colors.transparent,
+        splashColor: const Color.fromRGBO(0, 0, 0, 0),
         onTap: () => onTapped(product),
         child: Container(
           decoration: BoxDecoration(
@@ -91,7 +91,7 @@ class ProductCard extends StatelessWidget {
                                   Padding(
                                     padding: const EdgeInsets.only(top: 4),
                                     child: Row(
-                                      children: <Widget>[
+                                      children: const <Widget>[
                                         // RatingBar(
                                         //   initialRating:
                                         //   hotelData!.rating,

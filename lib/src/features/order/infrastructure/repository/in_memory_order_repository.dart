@@ -13,9 +13,14 @@ class InMemoryOrderRepository implements OrderRepository {
   final List<OrderStatusData> _orderStatusDataList = [];
 
   @override
-  Future<void> addOrder(Order order) async {
+  Future<void> addUndeliveredOrder(Order order) async {
     _undeliveedOrderList.add(order);
     _order.value = _undeliveedOrderList.toList();
+    updateOrderValue();
+  }
+
+  void updateOrderValue() {
+    _order.value = [..._undeliveedOrderList, ..._deliveredOrderList];
   }
 
   @override
@@ -38,31 +43,50 @@ class InMemoryOrderRepository implements OrderRepository {
 
   @override
   Future<void> addDeliverdOrder(Order order) async {
-    final List<Order> deliveredOrderList = [];
+    _deliveredOrderList.add(order);
+    updateOrderValue();
   }
 
   @override
-  Future<void> addOrderStatus(OrderStatusData status) {
-    // TODO: implement addOrderStatus
-    throw UnimplementedError();
+  Future<void> addOrderStatus(OrderStatusData status) async {
+    _orderStatusDataList.add(status);
   }
 
   @override
-  Future<void> deleteOrder(Order order) {
-    final a = order;
-    // TODO: implement deleteOrder
-    throw UnimplementedError();
+  Future<void> deleteUndeliveredOrder(Order order) async {
+    final index =
+        _undeliveedOrderList.indexWhere((element) => element.id == order.id);
+    _undeliveedOrderList.removeAt(index);
+    updateOrderValue();
   }
 
   @override
-  Future<OrderStatusData?> fetchOrderStatus(String orderId) {
-    // TODO: implement fetchOrderStatus
-    throw UnimplementedError();
+  Future<OrderStatusData?> fetchOrderStatus(String orderId) async {
+    final index = _orderStatusDataList
+        .indexWhere((element) => element.orderId == orderId);
+    if (index >= 0) {
+      return _orderStatusDataList[index];
+    }
+
+    return null;
   }
 
   @override
-  Future<void> updateOrderStatus(OrderStatusData status) {
-    // TODO: implement updateOrderStatus
-    throw UnimplementedError();
+  Future<void> updateOrderStatus(OrderStatusData status) async {
+    final index = _orderStatusDataList
+        .indexWhere((element) => element.orderId == status.orderId);
+    if (index == -1) {
+      throw Exception("OrderStatus is not exists");
+    }
+
+    _orderStatusDataList[index] = status;
+  }
+
+  @override
+  Future<Order?> fetchUndeliveredOrder(String orderId) async {
+    final index =
+        _undeliveedOrderList.indexWhere((element) => element.id == orderId);
+    if (index == -1) return null;
+    return _undeliveedOrderList[index];
   }
 }

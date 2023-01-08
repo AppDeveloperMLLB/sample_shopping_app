@@ -1,7 +1,6 @@
 import 'package:flutter/animation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sample_shopping_app/src/features/cart/application/cart_application_service.dart';
-import 'package:sample_shopping_app/src/features/cart/domain/models/cart_item.dart';
 import 'package:sample_shopping_app/src/features/product_list/domain/model/product.dart';
 
 final productPageControllerProvider =
@@ -22,6 +21,6 @@ class ProductPageController extends StateNotifier<AsyncValue<void>> {
     state = await AsyncValue.guard(
         () => cartApplicationService.add(productId: product.id, num: num));
     if (state.hasError) return;
-    onSuccess?.call();
+    onSuccess.call();
   }
 }

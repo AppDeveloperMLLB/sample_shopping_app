@@ -38,7 +38,7 @@ class OrderCard extends ConsumerWidget {
                 Text("商品名：${orderData.productName}"),
                 Text("商品金額：${orderData.productPrice}"),
                 Text("注文日時：${dtFormat.format(orderData.dateTime)}"),
-                const Text("注文状況：配達中"),
+                Text("注文状況：${orderData.status.toString()}"),
               ],
             ),
           ),
