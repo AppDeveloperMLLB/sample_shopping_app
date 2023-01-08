@@ -42,7 +42,8 @@ final orderDataListProvider = FutureProvider<List<OrderData>>((ref) async {
     return [];
   }
 
-  final List<Order> orderList = ref.watch(orderListProvider.select((value) {
+  final List<Order> orderList =
+      ref.watch(allOrderStreamProvider.select((value) {
     if (value.value == null) {
       return [];
     }

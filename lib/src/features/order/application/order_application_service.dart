@@ -27,7 +27,7 @@ class OrderApplicationService {
   }
 }
 
-final orderListProvider = StreamProvider<List<Order>>((ref) {
+final allOrderStreamProvider = StreamProvider<List<Order>>((ref) {
   final orderRepository = RepositoryLocator.instance.get<OrderRepository>();
   return orderRepository.watchOrder();
 });

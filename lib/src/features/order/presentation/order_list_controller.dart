@@ -43,7 +43,8 @@ final orderDataListProvider =
   }
 
   final userId = authRepo.currentUser!.id;
-  final List<Order> orderList = ref.watch(orderListProvider.select((value) {
+  final List<Order> orderList =
+      ref.watch(allOrderStreamProvider.select((value) {
     if (value.value == null) {
       return [];
     }
