@@ -27,6 +27,7 @@ class OrderApplicationService {
   }
 }
 
+/// 未配達、キャンセル、配達済みの全注文のStream
 final allOrderStreamProvider = StreamProvider<List<Order>>((ref) {
   final orderRepository = RepositoryLocator.instance.get<OrderRepository>();
   return orderRepository.watchOrder();
