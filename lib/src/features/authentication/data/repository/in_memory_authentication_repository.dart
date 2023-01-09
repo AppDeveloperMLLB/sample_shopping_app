@@ -7,8 +7,13 @@ import 'package:uuid/uuid.dart';
 class InMemoryAuthenticationRepository implements AuthenticationRepository {
   InMemoryAuthenticationRepository._();
   static final instance = InMemoryAuthenticationRepository._();
+  static const User testUser = User(
+    id: "0001",
+    email: "test@test.com",
+    password: "12345678",
+  );
   final List<User> _userList = [
-    User(id: "0001", email: "test@test.com", password: "12345678"),
+    const User(id: "0001", email: "test@test.com", password: "12345678"),
   ];
   final _authState = InMemoryStore<User?>(null);
 
@@ -44,7 +49,7 @@ class InMemoryAuthenticationRepository implements AuthenticationRepository {
       throw Exception("User exists.");
     }
 
-    final newId = Uuid().v4();
+    final newId = const Uuid().v4();
     final newUser = User(id: newId, email: info.email, password: info.password);
     _userList.add(newUser);
     _authState.value = newUser;
