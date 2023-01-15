@@ -13,12 +13,13 @@ class CartItemCountChangerWidget extends ConsumerWidget {
     return Row(
       children: [
         IconButton(
-            onPressed: () {
-              ref
-                  .read(shoppingCartPageControllerProvider.notifier)
-                  .decrement(productId);
-            },
-            icon: const Icon(Icons.remove)),
+          onPressed: () {
+            ref
+                .read(shoppingCartPageControllerProvider.notifier)
+                .decrement(productId);
+          },
+          icon: const Icon(Icons.remove),
+        ),
         CartItemCountText(
           productId: productId,
         ),
@@ -43,13 +44,13 @@ class CartItemCountText extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(cartProvider.select(
       (value) {
-        if(value.value == null || value.value!.isEmpty){
+        if (value.value == null || value.value!.isEmpty) {
           return 0;
         }
 
         return value.value!
             .firstWhere((element) => element.product.id == productId)
-            ?.num;
+            .num;
       },
     ));
     return Text("${state ?? 1}");

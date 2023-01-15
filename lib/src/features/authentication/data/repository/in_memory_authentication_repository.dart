@@ -13,8 +13,9 @@ class InMemoryAuthenticationRepository implements AuthenticationRepository {
     password: "12345678",
   );
   final List<User> _userList = [
-    const User(id: "0001", email: "test@test.com", password: "12345678"),
+    testUser,
   ];
+
   final _authState = InMemoryStore<User?>(null);
 
   @override
@@ -56,7 +57,12 @@ class InMemoryAuthenticationRepository implements AuthenticationRepository {
   }
 
   User? getUser(AuthenticationInfo info) {
-    return _userList.firstWhere((element) =>
+    final index = _userList.indexWhere((element) =>
         element.email == info.email && element.password == info.password);
+    if (index == -1) {
+      return null;
+    }
+
+    return _userList[index];
   }
 }
