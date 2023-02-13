@@ -1,4 +1,3 @@
-import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sample_shopping_app/src/features/authentication/presentation/acount/account_page.dart';
@@ -80,7 +79,7 @@ class ShoppingCartIcon extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final itemCount = ref.watch(cartItemsTotalCountProvider);
     return Badge(
-      badgeContent: Text("$itemCount"),
+      label: Text("$itemCount"),
       child: const Icon(
         Icons.shopping_cart,
       ),
