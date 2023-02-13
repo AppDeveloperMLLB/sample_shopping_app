@@ -63,9 +63,6 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
               icon: Icon(Icons.manage_accounts),
               label: 'Delivery',
             ),
-            // BottomNavigationBarItem(
-            //     icon: Icon(Icons.local_shipping), label: 'Delivery'),
-            // BottomNavigationBarItem(icon: Icon(Icons.list), label: 'Sample'),
           ],
           type: BottomNavigationBarType.fixed,
         ));
