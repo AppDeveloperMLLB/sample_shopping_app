@@ -53,6 +53,6 @@ class CartItemCountText extends ConsumerWidget {
             .num;
       },
     ));
-    return Text("${state ?? 1}");
+    return Text("$state");
   }
 }

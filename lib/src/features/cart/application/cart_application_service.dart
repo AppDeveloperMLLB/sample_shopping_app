@@ -150,7 +150,7 @@ final itemCountProvider =
   if (cart != null) {
     final product =
         cart.firstWhere((element) => element.product.id == productId);
-    return product.num ?? 1;
+    return product.num;
   }
 
   return 1;
